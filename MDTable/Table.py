@@ -81,20 +81,32 @@ class Table:
             
     def __str__(self) -> str:
         """Return table as string"""
+        tableSize = [self.__get_size_of_column(i) for i in range(len(self.header))]
         table = "|"
-        for i in self.header:
-            table += " " + str(i) + " |"
-        table += "\n"
         for i in range(len(self.header)):
-            table += "| --- "
-        table += "|\n"
+            table += " " + self.header[i] + " "*(tableSize[i] - len(self.header[i])) + " |"
+        table += "\n|"
+        for i in range(len(self.header)):
+            table += "-"*(tableSize[i] + 2) + "|"
+        table += "\n"
         for i in self.data:
             table += "|"
-            for j in i:
-                table += " " + str(j) + " |"
+            for j in range(len(i)):
+                table += " " + str(i[j]) + " "*(tableSize[j] - len(str(i[j]))) + " |"
             table += "\n"
         return table
 
+
+
+    def __get_size_of_column(self, column: int) -> int:
+        """Return size of column"""
+        size = 0
+        for i in self.data:
+            if len(str(i[column])) > size:
+                size = len(str(i[column]))
+        if len(self.header[column]) > size:
+            size = len(self.header[column])
+        return size
         
         
 
